@@ -74,7 +74,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 			$this->main_prefix . 'options',
 			__( 'Custom Hamburger Menu' ),
 			__( 'Custom Hamburger Menu' ),
-			'switch_theme',
+			'switch_themes',
 			$this->plugin_prefix . 'options',
 			array( $this, 'render_options_page' )
 		);
