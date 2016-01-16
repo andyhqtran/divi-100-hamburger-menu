@@ -18,7 +18,7 @@
 /**
  * Load Divi 100 Setup
  */
-require_once( plugin_dir_path( __FILE__ ) . 'divi-100-setup.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'divi-100-setup/divi-100-setup.php' );
 
 /**
  * Load Custom Hamburger Menu
