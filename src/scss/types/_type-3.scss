@@ -2,8 +2,7 @@
   @extend #{$prefix-type + "2"};
 }
 
-#{$prefix-type + "3 " + $prefix} {
-
+@include type(3) {
   div {
     &:before {
       width: 100%;

@@ -22,3 +22,140 @@
     }
   }
 }
+
+
+@include style(2, 2) {
+  div {
+    &:not(:first-child):not(:last-child) {
+      opacity: 1;
+
+      &:before,
+      &:after {
+        width: 0;
+        min-width: 0;
+        margin-left: 0;
+        opacity: 1;
+      }
+    }
+  }
+}
+
+
+@include style(2, 3) {
+  $type: 2;
+  $style: 3;
+  $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "DL");
+  $pseudo-name: (first-before: "T" + $type + "S" + $style + "DFB", first-after: "T" + $type + "S" + $style + "DMA", middle-before: "T" + $type + "S" + $style + "DFB", middle-after: "T" + $type + "S" + $style + "DMA", last-before: "T" + $type + "S" + $style + "DFB", last-after: "T" + $type + "S" + $style + "DMA");
+
+  div {
+    &:first-child {
+      animation-name: #{map-get($name, first)};
+
+      @keyframes #{map-get($name, first)} {
+
+        0% {
+          transform: none;
+        }
+
+        20% {
+          transform: none;
+        }
+
+        40% {
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2);
+        }
+
+        80% {
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(45deg);
+        }
+      }
+
+      &:before {
+        animation-name: #{map-get($pseudo-name, first-before)};
+
+        @keyframes #{map-get($pseudo-name, first-before)} {
+
+          0% {
+            width: 100%;
+            transform: none;
+          }
+
+          20% {
+            transform: none;
+          }
+        }
+      }
+
+      &:after {
+        animation-name: #{map-get($pseudo-name, first-after)};
+
+        @keyframes #{map-get($pseudo-name, first-after)} {
+
+          0% {
+            width: 100%;
+            transform: none;
+          }
+
+          20% {
+            transform: none;
+          }
+        }
+      }
+    }
+
+    &:last-child {
+      animation-name: #{map-get($name, last)};
+
+      @keyframes #{map-get($name, last)} {
+
+        0% {
+          transform: none;
+        }
+
+        20% {
+          transform: none;
+        }
+
+        40% {
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2)) + $bar-height / 2);
+        }
+
+        80% {
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(-45deg);
+        }
+      }
+
+      &:before {
+        animation-name: #{map-get($pseudo-name, last-before)};
+
+        @keyframes #{map-get($pseudo-name, last-before)} {
+
+          0% {
+            width: 100%;
+            transform: none;
+          }
+
+          20% {
+            transform: none;
+          }
+        }
+      }
+
+      &:after {
+        animation-name: #{map-get($pseudo-name, last-after)};
+
+        @keyframes #{map-get($pseudo-name, last-after)} {
+
+          0% {
+            width: 100%;
+            transform: none;
+          }
+
+          20% {
+            transform: none;
+          }
+        }
+      }
+    }
+  }
+}
