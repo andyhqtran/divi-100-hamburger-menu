@@ -48,7 +48,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	 */
 	private function __construct(){
 		$this->main_prefix   = 'et_divi_100_';
-		$this->plugin_slug   = 'custom_hamburger_menu--type';
+		$this->plugin_slug   = 'custom_hamburger_menu';
 		$this->plugin_prefix = "{$this->main_prefix}{$this->plugin_slug}-";
 
 		$this->init();
@@ -88,21 +88,23 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 		$is_option_updated         = false;
 		$is_option_updated_success = false;
 		$is_option_updated_message = '';
-		$hamburger_menu_name       = 'hamburger-menu-style';
+		$hamburger_menu_style      = 'hamburger-menu-style';
+		$hamburger_menu_type       = 'hamburger-menu-type';
 		$nonce_action              = $this->plugin_prefix . 'options';
 		$nonce                     = $this->plugin_prefix . 'options_nonce';
 
 		// Verify whether an update has been occured
-		if ( isset( $_POST[ $hamburger_menu_name ] ) && isset( $_POST[ $nonce ] ) ) {
+		if ( isset( $_POST[ $hamburger_menu_style ] ) && isset( $_POST[ $hamburger_menu_type ] ) && isset( $_POST[ $nonce ] ) ) {
 			$is_option_updated = true;
 
 			// Verify nonce. Thou shalt use correct nonce
 			if ( wp_verify_nonce( $_POST[ $nonce ], $nonce_action ) ) {
 
 				// Verify input
-				if ( in_array( $_POST[$hamburger_menu_name], array_keys( $this->get_styles() ) ) ) {
+				if ( in_array( $_POST[$hamburger_menu_style], array_keys( $this->get_styles() ) ) && in_array( $_POST[$hamburger_menu_type], array_keys( $this->get_types() ) ) ) {
 					// Update option
-					update_option( $this->plugin_prefix . 'styles', sanitize_text_field( $_POST[ $hamburger_menu_name ] ) );
+					update_option( $this->plugin_prefix . 'styles', sanitize_text_field( $_POST[ $hamburger_menu_style ] ) );
+					update_option( $this->plugin_prefix . 'types', sanitize_text_field( $_POST[ $hamburger_menu_type ] ) );
 
 					// Update submission status & message
 					$is_option_updated_message = __( 'Your setting has been updated.' );
@@ -137,6 +139,31 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 					<tbody>
 						<tr>
 							<th scope="row">
+								<label for="hamburger-menu-type"><?php _e( 'Select Type' ); ?></label>
+							</th>
+							<td>
+								<select name="hamburger-menu-type" id="hamburger-menu-type">
+									<?php
+									// Get saved type
+									$csf_type = $this->get_selected_type();
+
+									// Render options
+									foreach ( $this->get_types() as $type_id => $type ) {
+										printf(
+											'<option value="%1$s" %3$s>%2$s</option>',
+											esc_attr( $type_id ),
+											esc_html( $type ),
+											"{$csf_type}" === "{$type_id}" ? 'selected="selected"' : ''
+										);
+									}
+									?>
+								</select>
+								<p class="description"><?php _e( 'Proper description goes here' ); ?></p>
+							</td>
+						</tr>
+
+						<tr>
+							<th scope="row">
 								<label for="hamburger-menu-style"><?php _e( 'Select Style' ); ?></label>
 							</th>
 							<td>
@@ -151,7 +178,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 											'<option value="%1$s" %3$s>%2$s</option>',
 											esc_attr( $style_id ),
 											esc_html( $style ),
-											$csf_style === $style_id ? 'selected="selected"' : ''
+											"{$csf_style}" === "{$style_id}" ? 'selected="selected"' : ''
 										);
 									}
 									?>
@@ -178,7 +205,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 
 	/**
 	 * List of valid styles
-	 * @return void
+	 * @return array
 	 */
 	function get_styles() {
 		return apply_filters( $this->plugin_prefix . 'styles', array(
@@ -191,13 +218,43 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	}
 
 	/**
+	 * List of valid types
+	 * @return array
+	 */
+	function get_types() {
+		return apply_filters( $this->plugin_prefix . 'types', array(
+			''  => __( 'Default' ),
+			'1' => __( 'One' ),
+			'2' => __( 'Two' ),
+			'3' => __( 'Three' ),
+			'4' => __( 'Four' ),
+		) );
+	}
+
+	/**
+	 * Get selected option
+	 * @return string
+	 */
+	function get_selected_option( $singular, $plural ) {
+		$option = get_option( $this->plugin_prefix . $plural, '' );
+
+		return apply_filters( $this->plugin_prefix . 'get_selected_' . $singular, $option );
+	}
+
+	/**
 	 * Get selected style
 	 * @return string
 	 */
 	function get_selected_style() {
-		$csf_style = get_option( $this->plugin_prefix . 'styles', '' );
+		return $this->get_selected_option( 'style', 'styles' );
+	}
 
-		return apply_filters( $this->plugin_prefix . 'get_selected_style', $csf_style );
+	/**
+	 * Get selected type
+	 * @return string
+	 */
+	function get_selected_type() {
+		return $this->get_selected_option( 'type', 'types' );
 	}
 
 	/**
@@ -208,9 +265,16 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 		// Get selected style
 		$selected_style = $this->get_selected_style();
 
+		// Get selected type
+		$selected_type = $this->get_selected_type();
+
 		// Assign specific class to <body> if needed
 		if ( '' !== $selected_style ) {
-			$classes[] = sanitize_title(  $this->plugin_prefix . $selected_style );
+			$classes[] = esc_attr(  $this->plugin_prefix . '-style-' . $selected_style );
+		}
+
+		if ( '' !== $selected_type ) {
+			$classes[] = esc_attr(  $this->plugin_prefix . '-type-' . $selected_type );
 		}
 
 		return $classes;
