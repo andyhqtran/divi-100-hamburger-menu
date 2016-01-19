@@ -1,0 +1,18 @@
+#{$prefix-type + "3"} {
+  @extend #{$prefix-type + "2"};
+}
+
+#{$prefix-type + "3 " + $prefix} {
+
+  div {
+    &:before {
+      width: 100%;
+      margin: 0 2px 0 0;
+    }
+
+    &:after {
+      width: 2px;
+      margin: 0;
+    }
+  }
+}

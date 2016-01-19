@@ -1,0 +1,245 @@
+@include type(1) {}
+
+
+@include style(1, 2) {
+  div {
+    &:not(:first-child):not(:last-child) {
+      width: 0;
+      margin-left: 0;
+      opacity: 1;
+    }
+  }
+}
+
+
+@include style(1, 3) {
+  $type: 1;
+  $style: 3;
+  $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "L");
+
+  div {
+    &:first-child {
+      animation-name: #{map-get($name, first)};
+
+      @keyframes #{map-get($name, first)} {
+
+        0% {
+          transform: none;
+        }
+
+        40% {
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2);
+        }
+
+        80% {
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(45deg);
+        }
+      }
+    }
+
+    &:last-child {
+      animation-name: #{map-get($name, last)};
+
+      @keyframes #{map-get($name, last)} {
+
+        0% {
+          transform: none;
+        }
+
+        40% {
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2));
+        }
+
+        80% {
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(-45deg);
+        }
+      }
+    }
+  }
+}
+
+
+@include style(1, 4) {
+  $type: 1;
+  $style: 4;
+  $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "L");
+
+  div {
+    animation-timing-function: linear;
+
+    &:first-child {
+      animation-name: #{map-get($name, first)};
+
+      @keyframes #{map-get($name, first)} {
+
+        0% {
+          margin-right: 0;
+          transform: none;
+        }
+
+        20% {
+          width: 100%;
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2);
+        }
+
+        40% {
+          width: 0;
+          margin-right: 0;
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2);
+        }
+
+        80% {
+          width: 0;
+          margin-right: auto;
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(45deg);
+        }
+
+        90% {
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(45deg);
+        }
+      }
+    }
+
+    &:last-child {
+      animation-name: #{map-get($name, last)};
+
+      @keyframes #{map-get($name, last)} {
+
+        0% {
+          margin-left: 0;
+          transform: none;
+        }
+
+        20% {
+          width: 100%;
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2));
+        }
+
+        40% {
+          width: 0;
+          margin-left: 0;
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2));
+        }
+
+        80% {
+          width: 0;
+          margin-left: auto;
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(-45deg);
+        }
+
+        90% {
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(-45deg);
+        }
+      }
+    }
+  }
+}
+
+
+@include style(1, 5) {
+  $type: 1;
+  $style: 5;
+  $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "L");
+
+  div {
+    animation-timing-function: linear;
+
+    &:first-child {
+      animation-name: #{map-get($name, first)};
+
+      @keyframes #{map-get($name, first)} {
+
+        0% {
+          margin-right: 0;
+          transform: none;
+          transform-origin: top right;
+        }
+
+        25% {
+          width: 100%;
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(10deg);
+        }
+
+        30% {
+          width: 100%;
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(10deg);
+        }
+
+        40% {
+          width: 0%;
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(10deg);
+        }
+
+        50% {
+          width: 0%;
+          transform-origin: center;
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(45deg);
+        }
+
+        90% {
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(45deg);
+        }
+      }
+    }
+
+    &:not(:first-child):not(:last-child) {
+      animation-name: #{map-get($name, middle)};
+      width: 0%;
+
+      @keyframes #{map-get($name, middle)} {
+
+        0% {
+          width: 100%;
+          opacity: 1;
+        }
+
+        40% {
+          width: 100%;
+        }
+
+        50% {
+          width: 0%;
+          opacity: 1;
+        }
+      }
+    }
+
+    &:last-child {
+      animation-name: #{map-get($name, last)};
+
+      @keyframes #{map-get($name, last)} {
+
+        0% {
+          margin-left: 0;
+          transform: none;
+          transform-origin: bottom left;
+        }
+
+        25% {
+          width: 100%;
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(10deg);
+        }
+
+        30% {
+          width: 100%;
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(10deg);
+        }
+
+        40% {
+          width: 0%;
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(10deg);
+        }
+
+        50% {
+          width: 0%;
+          transform-origin: center;
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(-45deg);
+        }
+
+        90% {
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(-45deg);
+        }
+      }
+    }
+  }
+}

@@ -21,17 +21,17 @@ $white: #FFF;
 
 // Divi 100 Settings
 $prefix-plugin: "custom_hamburger_menu";
-$prefix-style: "--style-";
-$prefix-toggle: "--toggle";
-$prefix-type: "--type-";
 $prefix: ".et_divi_100_" + $prefix-plugin;
+$prefix-style: $prefix + "--style-";
+$prefix-toggle: $prefix + "--toggled";
+$prefix-type: $prefix + "--type-";
 
 // Hamburger Settings
 $hamburger-size: rem(30); // Hamburger Size
 $bar-total: 3; // Bar Total
 $bar-height: rem(2); // Bar Height
-$duration: 0.3s;
-$timing: cubic-bezier(0.28, 0.55, 0.385, 1.65);
+$bar-duration: 0.3s;
+$bar-timing: cubic-bezier(0.28, 0.55, 0.385, 1.65);
 
 @media only screen and (max-width: 980px) {}
 
@@ -43,127 +43,126 @@ $timing: cubic-bezier(0.28, 0.55, 0.385, 1.65);
   height: $hamburger-size;
   box-sizing: border-box;
   cursor: pointer;
-  padding: ($hamburger-size - $bar-height * 3) / ($bar-total * 2);
+  padding: ($hamburger-size - $bar-height * $bar-total) / ($bar-total * 2);
   clear: both;
 
   div {
     background: $black;
     width: 100%;
     height: $bar-height;
-    margin: (($hamburger-size - $bar-height * 3) / ($bar-total * 2)) auto;
+    margin: (($hamburger-size - $bar-height * $bar-total) / ($bar-total * 2)) auto;
     border-radius: 10px;
-    transition: $duration $timing;
-    transition-timing-function: $timing;
+    transition: $bar-duration $bar-timing;
+    transition-timing-function: $bar-timing;
     transform: 0;
     transform-origin: center;
+
+    &:before,
+    &:after {
+      transition: $bar-duration $bar-timing;
+      transition-timing-function: $bar-timing;
+    }
   }
 }
 
-/* Type */
-#{$prefix + $prefix-type} {
+@mixin type($type) {
+  #{$prefix-type + $type + " " + $prefix} {
+    @content;
+  }
+}
 
-  // Type 1
-  &1 {
-    /* Style */
-    &#{$prefix + $prefix-plugin + $prefix-style} {
+@mixin style($type, $style) {
+  #{$prefix-type + $type + $prefix-style + $style + " " + $prefix + $prefix-toggle} {
+    @content;
+  }
+}
 
-      // Style 1
-      &1 {
-        #{$prefix} {
-          &#{$prefix-toggle} {}
-        }
-      }
+/* Type 1 */
+@import "types/type-1";
 
-      // Style 2
-      &2 {
-        #{$prefix} {
-          &#{$prefix-toggle} {}
-        }
-      }
+/* Type 2 */
+@import "types/type-2";
 
-      // Style 3
-      &3 {
-        #{$prefix} {
-          &#{$prefix-toggle} {}
-        }
-      }
+/* Type 3 */
+@import "types/type-3";
 
-      // Style 4
-      &4 {
-        #{$prefix} {
-          &#{$prefix-toggle} {}
-        }
-      }
+/* Type 4 */
+@import "types/type-4";
 
-      // Style 5
-      &5 {
-        #{$prefix} {
-          &#{$prefix-toggle} {}
-        }
-      }
+// Toggled
+#{$prefix + $prefix-toggle} {
+
+  div {
+    width: 100%;
+    animation-duration: $bar-duration * 2;
+    animation-timing-function: $bar-timing;
+
+    &:after,
+    &:before {
+      width: 100%;
+    }
+
+    &:first-child {
+      transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(45deg);
+    }
+
+    &:not(:first-child):not(:last-child) {
+      opacity: 0;
+    }
+
+    &:last-child {
+      transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(-45deg);
     }
   }
+}
 
-  // Type 2
-  &2 {
-    #{$prefix} {
+// Demo
+body {
+  background: #F3F3F3;
+  font-family: 'Open Sans';
+}
 
-      div {
-        display: flex;
-        flex-direction: row;
-        background: 0;
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: top;
+  margin: 80px 0;
+}
 
-        &:before,
-        &:after {
-          content: '';
-          display: block;
-          background: $black;
-          width: 2px;
-          min-width: 2px;
-          height: 2px;
-          border-radius: 10px;
-          margin: 0 2px 0 0;
-          transition: $duration $timing;
-          transition-timing-function: $timing;
-        }
+.row {
+  position: relative;
+  margin: 0 0 40px;
+}
 
-        &:after {
-          width: 100%;
-          margin: 0;
-        }
-      }
-    }
-  }
+.col {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-basis: 100% / $types;
+  width: 100% / $types;
+  max-width: 100% / $types;
+  min-width: 100% / $types;
+}
 
-  // Type 3
-  &3 {
-    @extend #{$prefix + $prefix-type + "2"};
+.label {
+  margin: 0 0 10px;
+  font-size: 10px;
+}
 
-    #{$prefix} {
+.et_custom_hamburger_menu {
+  background: rgba($black, 0.1);
+  margin: 0 auto;
+}
 
-      div {
-        &:before {
-          width: 100%;
-          margin: 0 2px 0 0;
-        }
-
-        &:after {
-          width: 2px;
-          margin: 0;
-        }
-      }
-    }
-  }
-
-  // Type 4
-  &4 {
-    #{$prefix} {
-
-      div {
-        width: 2px;
-        margin-right: auto;
-        margin-left: auto;
-      }
-    }
-  }
+.toggle_all {
+  display: block;
+  background: rgba($black, 0.1);
+  max-width: 120px;
+  margin: 40px auto;
+  border: 0;
+  border-radius: 3px;
+  padding: 8px 12px;
+  font-size: 10px;
+  cursor: pointer;
 }
