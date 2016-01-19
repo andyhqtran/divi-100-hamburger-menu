@@ -48,8 +48,8 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	 */
 	private function __construct(){
 		$this->main_prefix   = 'et_divi_100_';
-		$this->plugin_slug   = 'custom_hamburger_menu';
-		$this->plugin_prefix = "{$this->main_prefix}{$this->plugin_slug}_";
+		$this->plugin_slug   = 'custom_hamburger_menu--type';
+		$this->plugin_prefix = "{$this->main_prefix}{$this->plugin_slug}-";
 
 		$this->init();
 	}
@@ -182,11 +182,11 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	 */
 	function get_styles() {
 		return apply_filters( $this->plugin_prefix . 'styles', array(
-			''      => __( 'Default' ),
-			'one'   => __( 'One' ),
-			'two'   => __( 'Two' ),
-			'three' => __( 'Three' ),
-			'four'  => __( 'Four' ),
+			''  => __( 'Default' ),
+			'1' => __( 'One' ),
+			'2' => __( 'Two' ),
+			'3' => __( 'Three' ),
+			'4' => __( 'Four' ),
 		) );
 	}
 
