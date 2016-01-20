@@ -1,8 +1,177 @@
-#{$prefix-type + "4 " + $prefix} {
-
+@include type(4) {
   div {
     width: 2px;
     margin-right: auto;
     margin-left: auto;
+  }
+}
+
+
+@include style(4, 2) {
+  $type: 4;
+  $style: 2;
+  $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "L");
+
+  div {
+    &:first-child {
+      animation-name: #{map-get($name, first)};
+
+      @keyframes #{map-get($name, first)} {
+
+        0% {
+          transform: none;
+        }
+
+        20% {
+          width: 2px;
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2);
+        }
+
+        40% {
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2);
+        }
+
+        80% {
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(45deg);
+        }
+      }
+    }
+
+    &:last-child {
+      animation-name: #{map-get($name, last)};
+
+      @keyframes #{map-get($name, last)} {
+
+        0% {
+          transform: none;
+        }
+
+        20% {
+          width: 2px;
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2));
+        }
+
+        40% {
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2));
+        }
+
+        80% {
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(-45deg);
+        }
+      }
+    }
+  }
+}
+
+
+@include style(4, 3) {
+  $type: 4;
+  $style: 3;
+  $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "L");
+
+  animation: #{"T" + $type + "S" + $style} ($bar-duration * 2) $bar-timing;
+
+  @keyframes #{"T" + $type + "S" + $style} {
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  div {
+    animation-timing-function: linear;
+
+    &:first-child {
+      animation-name: #{map-get($name, first)};
+
+      @keyframes #{map-get($name, first)} {
+
+        0% {
+          transform: none;
+        }
+
+        40% {
+          width: 2px;
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2);
+        }
+
+        80% {
+          transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(45deg);
+        }
+      }
+    }
+
+    &:last-child {
+      animation-name: #{map-get($name, last)};
+
+      @keyframes #{map-get($name, last)} {
+
+        0% {
+          transform: none;
+        }
+
+        40% {
+          width: 2px;
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2));
+        }
+
+        80% {
+          transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(-45deg);
+        }
+      }
+    }
+  }
+}
+
+
+@include style(4, 4) {
+  $type: 4;
+  $style: 4;
+  $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "L");
+
+  animation: #{"T" + $type + "S" + $style} ($bar-duration * 2) $bar-timing;
+
+  @keyframes #{"T" + $type + "S" + $style} {
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  div {
+    &:first-child {
+      animation-name: #{map-get($name, first)};
+
+      @keyframes #{map-get($name, first)} {}
+    }
+  }
+}
+
+
+@include style(4, 5) {
+  $type: 4;
+  $style: 5;
+  $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "L");
+
+  transform: rotate(45deg);
+  transition: $bar-duration $bar-timing;
+  transition-timing-function: $bar-timing;
+
+  div {
+    width: 2px;
+    transform: none;
+
+    &:first-child {
+      transform: translateY(-4px);
+    }
+
+    &:not(:first-child):not(:last-child) {
+      width: 100%;
+      opacity: 1;
+    }
+
+    &:last-child {
+      transform: translateY(4px);
+    }
   }
 }

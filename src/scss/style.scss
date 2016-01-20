@@ -116,6 +116,15 @@ $bar-timing: cubic-bezier(0.28, 0.55, 0.385, 1.65);
   }
 }
 
+.mobile_menu_bar {
+  padding-bottom: 0;
+  margin-bottom: 26px;
+
+  &:before {
+    display: none;
+  }
+}
+
 // Demo
 body {
   background: #F3F3F3;
