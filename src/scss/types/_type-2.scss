@@ -45,7 +45,7 @@
   $type: 2;
   $style: 3;
   $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "DL");
-  $pseudo-name: (first-before: "T" + $type + "S" + $style + "DFB", first-after: "T" + $type + "S" + $style + "DMA", middle-before: "T" + $type + "S" + $style + "DFB", middle-after: "T" + $type + "S" + $style + "DMA", last-before: "T" + $type + "S" + $style + "DFB", last-after: "T" + $type + "S" + $style + "DMA");
+  $pseudo-name: (first-before: "T" + $type + "S" + $style + "DFB", first-after: "T" + $type + "S" + $style + "DMA", middle-before: "T" + $type + "S" + $style + "DMB", middle-after: "T" + $type + "S" + $style + "DMA", last-before: "T" + $type + "S" + $style + "DFB", last-after: "T" + $type + "S" + $style + "DMA");
 
   div {
     &:first-child {
@@ -153,6 +153,182 @@
 
           20% {
             transform: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@include style(2, 4) {
+  $type: 2;
+  $style: 4;
+  $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "DL");
+  $pseudo-name: (first-before: "T" + $type + "S" + $style + "DFB", first-after: "T" + $type + "S" + $style + "DFA", middle-before: "T" + $type + "S" + $style + "DMB", middle-after: "T" + $type + "S" + $style + "DMA", last-before: "T" + $type + "S" + $style + "DFB", last-after: "T" + $type + "S" + $style + "DMA");
+
+  div {
+    transform: none;
+
+    &:first-child {
+      &:before,
+      &:after {
+        width: 0%;
+        min-width: 0;
+        margin: 0 auto;
+        opacity: 0;
+      }
+    }
+
+    &:not(:first-child):not(:last-child) {
+      position: relative;
+      opacity: 1;
+
+      &:before,
+      &:after {
+        position: absolute;
+        width: 100%;
+        transition: all 0.3s linear transform 0.3s 0.3s linear;
+        transform-origin: center;
+      }
+
+      &:before {
+        transform: rotate(45deg);
+      }
+
+      &:after {
+        transform: rotate(-45deg);
+      }
+    }
+
+    &:last-child {
+      &:before,
+      &:after {
+        width: 100%;
+        min-width: 0;
+        opacity: 0;
+      }
+    }
+  }
+}
+
+
+@include style(2, 5) {
+  $type: 2;
+  $style: 5;
+  $name: (first: "T" + $type + "S" + $style + "DF", middle: "T" + $type + "S" + $style + "DM", last: "T" + $type + "S" + $style + "DL");
+  $pseudo-name: (first-before: "T" + $type + "S" + $style + "DFB", first-after: "T" + $type + "S" + $style + "DFA", middle-before: "T" + $type + "S" + $style + "DMB", middle-after: "T" + $type + "S" + $style + "DMA", last-before: "T" + $type + "S" + $style + "DFB", last-after: "T" + $type + "S" + $style + "DMA");
+
+  div {
+    transform: none;
+
+    &:first-child {
+      position: relative;
+      animation-name: #{map-get($name, first)};
+      transform: translateY(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2) rotate(45deg);
+
+      @keyframes #{map-get($name, first)} {
+
+        20% {
+          transform: none;
+        }
+      }
+
+      &:before,
+      &:after {
+        position: absolute;
+        width: 0;
+      }
+
+      &:before {
+        left: 0;
+        animation-name: #{map-get($pseudo-name, first-before)};
+
+        @keyframes #{map-get($pseudo-name, first-before)} {
+
+          20% {
+            width: 0%;
+          }
+        }
+      }
+
+      &:after {
+        right: 0;
+        animation-name: #{map-get($pseudo-name, first-after)};
+
+        @keyframes #{map-get($pseudo-name, first-after)} {
+
+          20% {
+            width: 0%;
+          }
+        }
+      }
+    }
+
+    &:not(:first-child):not(:last-child) {
+      position: relative;
+      opacity: 1;
+
+      &:before,
+      &:after {
+        margin: 0 auto;
+      }
+
+      &:before {
+        display: none;
+      }
+
+      &:after {
+        animation-name: #{map-get($name, last)};
+        width: 2px;
+
+        @keyframes #{map-get($name, last)} {
+
+          20% {
+            transform: 100%;
+          }
+        }
+      }
+    }
+
+    &:last-child {
+      position: relative;
+      animation-name: #{map-get($name, last)};
+      transform: translateY(-(($hamburger-size - $bar-height + $bar-height) / ($bar-total * 2) + $bar-height / 2)) rotate(-45deg);
+
+      @keyframes #{map-get($name, last)} {
+
+        20% {
+          transform: none;
+        }
+      }
+
+      &:before,
+      &:after {
+        position: absolute;
+        width: 0;
+      }
+
+      &:before {
+        left: 0;
+        animation-name: #{map-get($pseudo-name, last-before)};
+
+        @keyframes #{map-get($pseudo-name, last-before)} {
+
+          20% {
+            width: 0%;
+          }
+        }
+      }
+
+      &:after {
+        right: 0;
+        animation-name: #{map-get($pseudo-name, last-after)};
+
+        @keyframes #{map-get($pseudo-name, last-after)} {
+
+          20% {
+            width: 0%;
           }
         }
       }
