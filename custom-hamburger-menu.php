@@ -8,10 +8,10 @@
 /*
 * Plugin Name: Custom Hamburger Menu
 * Plugin URI: https://elegantthemes.com/
-* Description: TODO
-* Author: Andy Tran
+* Description: This plugin gives you the option to choose between 20 different hamburger menu variations for your header.
+* Author: Elegant Themes
 * Version: 0.0.1
-* Author URI: http://andy.design/
+* Author URI: http://elegantthemes.com/
 * License: GPL3
 */
 
