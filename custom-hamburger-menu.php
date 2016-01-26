@@ -60,9 +60,10 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	 * @return void
 	 */
 	private function init(){
-		add_action( 'admin_menu',         array( $this, 'add_submenu' ), 30 ); // Make sure the priority is higher than Divi 100's add_menu()
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
-		add_filter( 'body_class',         array( $this, 'body_class' ) );
+		add_action( 'admin_menu',            array( $this, 'add_submenu' ), 30 ); // Make sure the priority is higher than Divi 100's add_menu()
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_submenu_scripts' ) );
+		add_action( 'wp_enqueue_scripts',    array( $this, 'enqueue_frontend_scripts' ) );
+		add_filter( 'body_class',            array( $this, 'body_class' ) );
 	}
 
 	/**
@@ -78,6 +79,19 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 			$this->plugin_prefix . 'options',
 			array( $this, 'render_options_page' )
 		);
+	}
+
+	/**
+	 * Add dashboard scripts
+	 * @return void
+	 */
+	function add_submenu_scripts() {
+		if ( isset( $_GET['page'] ) && $this->plugin_prefix . 'options' === $_GET['page'] ) {
+			wp_enqueue_script( $this->plugin_prefix . 'dashboard-scripts', plugin_dir_url( __FILE__ ) . 'js/dashboard-scripts.js', array( 'jquery' ), '0.0.1', true );
+			wp_localize_script( $this->plugin_prefix . 'dashboard-scripts', $this->main_prefix, array(
+				'preview_dir_url' => plugin_dir_url( __FILE__ ) . 'preview/',
+			) );
+		}
 	}
 
 	/**
@@ -142,23 +156,29 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 								<label for="hamburger-menu-type"><?php _e( 'Select Type' ); ?></label>
 							</th>
 							<td>
-								<select name="hamburger-menu-type" id="hamburger-menu-type">
+								<select name="hamburger-menu-type" id="hamburger-menu-type" data-preview-prefix="type-">
 									<?php
 									// Get saved type
-									$csf_type = $this->get_selected_type();
+									$type = $this->get_selected_type();
 
 									// Render options
-									foreach ( $this->get_types() as $type_id => $type ) {
+									foreach ( $this->get_types() as $type_id => $type_label ) {
 										printf(
 											'<option value="%1$s" %3$s>%2$s</option>',
 											esc_attr( $type_id ),
-											esc_html( $type ),
-											"{$csf_type}" === "{$type_id}" ? 'selected="selected"' : ''
+											esc_html( $type_label ),
+											"{$type}" === "{$type_id}" ? 'selected="selected"' : ''
 										);
 									}
 									?>
 								</select>
 								<p class="description"><?php _e( 'Proper description goes here' ); ?></p>
+
+								<div class="option-preview" style="margin-top: 20px; <?php echo ( '' !== $type ) ? 'min-height: 182px; ' : ''; ?>">
+								<?php if ( '' !== $type ) { ?>
+									<img src="<?php echo plugin_dir_url( __FILE__ ) . 'preview/type-' . $type . '.gif'; ?>">
+								<?php } ?>
+								</div>
 							</td>
 						</tr>
 
@@ -167,23 +187,28 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 								<label for="hamburger-menu-style"><?php _e( 'Select Style' ); ?></label>
 							</th>
 							<td>
-								<select name="hamburger-menu-style" id="hamburger-menu-style">
+								<select name="hamburger-menu-style" id="hamburger-menu-style" data-preview-prefix="style-">
 									<?php
 									// Get saved style
-									$csf_style = $this->get_selected_style();
+									$style = $this->get_selected_style();
 
 									// Render options
-									foreach ( $this->get_styles() as $style_id => $style ) {
+									foreach ( $this->get_styles() as $style_id => $style_label ) {
 										printf(
 											'<option value="%1$s" %3$s>%2$s</option>',
 											esc_attr( $style_id ),
-											esc_html( $style ),
-											"{$csf_style}" === "{$style_id}" ? 'selected="selected"' : ''
+											esc_html( $style_label ),
+											"{$style}" === "{$style_id}" ? 'selected="selected"' : ''
 										);
 									}
 									?>
 								</select>
 								<p class="description"><?php _e( 'Proper description goes here' ); ?></p>
+								<div class="option-preview" style="margin-top: 20px; <?php echo ( '' !== $style ) ? 'min-height: 182px; ' : ''; ?>">
+								<?php if ( '' !== $style ) { ?>
+									<img src="<?php echo plugin_dir_url( __FILE__ ) . 'preview/style-' . $style . '.gif'; ?>">
+								<?php } ?>
+								</div>
 							</td>
 						</tr>
 					</tbody>
