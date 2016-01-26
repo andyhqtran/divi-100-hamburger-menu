@@ -117,10 +117,15 @@ $bar-timing: cubic-bezier(0.28, 0.55, 0.385, 1.65);
 }
 
 .mobile_menu_bar {
-  padding-bottom: 0;
-  margin-bottom: 26px;
-
-  &:before {
+  &:before,
+  &:after {
     display: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .mobile_menu_bar {
+    padding-bottom: 0;
+    margin-bottom: 26px;
   }
 }
