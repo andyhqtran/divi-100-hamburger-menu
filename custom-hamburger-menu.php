@@ -156,7 +156,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 								<label for="hamburger-menu-type"><?php _e( 'Select Type' ); ?></label>
 							</th>
 							<td>
-								<select name="hamburger-menu-type" id="hamburger-menu-type" data-preview-prefix="type-">
+								<select name="hamburger-menu-type" id="hamburger-menu-type">
 									<?php
 									// Get saved type
 									$type = $this->get_selected_type();
@@ -174,11 +174,6 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 								</select>
 								<p class="description"><?php _e( 'Proper description goes here' ); ?></p>
 
-								<div class="option-preview" style="margin-top: 20px; <?php echo ( '' !== $type ) ? 'min-height: 182px; ' : ''; ?>">
-								<?php if ( '' !== $type ) { ?>
-									<img src="<?php echo plugin_dir_url( __FILE__ ) . 'preview/type-' . $type . '.gif'; ?>">
-								<?php } ?>
-								</div>
 							</td>
 						</tr>
 
@@ -187,7 +182,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 								<label for="hamburger-menu-style"><?php _e( 'Select Style' ); ?></label>
 							</th>
 							<td>
-								<select name="hamburger-menu-style" id="hamburger-menu-style" data-preview-prefix="style-">
+								<select name="hamburger-menu-style" id="hamburger-menu-style">
 									<?php
 									// Get saved style
 									$style = $this->get_selected_style();
@@ -204,9 +199,9 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 									?>
 								</select>
 								<p class="description"><?php _e( 'Proper description goes here' ); ?></p>
-								<div class="option-preview" style="margin-top: 20px; <?php echo ( '' !== $style ) ? 'min-height: 182px; ' : ''; ?>">
+								<div class="option-preview" style="margin-top: 20px; <?php echo ( '' !== $style && '' !== $type ) ? 'min-height: 65px; ' : ''; ?>">
 								<?php if ( '' !== $style ) { ?>
-									<img src="<?php echo plugin_dir_url( __FILE__ ) . 'preview/style-' . $style . '.gif'; ?>">
+									<img src="<?php echo plugin_dir_url( __FILE__ ) . 'preview/hamburger-' . $type .'-' . $style . '.gif'; ?>">
 								<?php } ?>
 								</div>
 							</td>
