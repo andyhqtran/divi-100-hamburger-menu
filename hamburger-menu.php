@@ -30,7 +30,10 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	public static $instance;
 	public $main_prefix;
 	public $plugin_slug;
+	public $plugin_id;
 	public $plugin_prefix;
+	protected $settings;
+	protected $utils;
 
 	/**
 	 * Gets the instance of the plugin
@@ -49,7 +52,10 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	private function __construct(){
 		$this->main_prefix   = 'et_divi_100_';
 		$this->plugin_slug   = 'custom_hamburger_menu';
-		$this->plugin_prefix = "{$this->main_prefix}{$this->plugin_slug}-";
+		$this->plugin_id     = "{$this->main_prefix}{$this->plugin_slug}";
+		$this->plugin_prefix = "{$this->plugin_id}-";
+		$this->settings      = maybe_unserialize( get_option( $this->plugin_id ) );
+		$this->utils         = new Divi_100_Utils( $this->settings );
 
 		$this->init();
 	}
@@ -60,167 +66,42 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	 * @return void
 	 */
 	private function init(){
-		add_action( 'admin_menu',            array( $this, 'add_submenu' ), 30 ); // Make sure the priority is higher than Divi 100's add_menu()
-		add_action( 'admin_enqueue_scripts', array( $this, 'add_submenu_scripts' ) );
-		add_action( 'wp_enqueue_scripts',    array( $this, 'enqueue_frontend_scripts' ) );
-		add_filter( 'body_class',            array( $this, 'body_class' ) );
-	}
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
+		add_filter( 'body_class',         array( $this, 'body_class' ) );
 
-	/**
-	 * Add submenu
-	 * @return void
-	 */
-	function add_submenu() {
-		add_submenu_page(
-			$this->main_prefix . 'options',
-			__( 'Custom Hamburger Menu' ),
-			__( 'Custom Hamburger Menu' ),
-			'switch_themes',
-			$this->plugin_prefix . 'options',
-			array( $this, 'render_options_page' )
-		);
-	}
-
-	/**
-	 * Add dashboard scripts
-	 * @return void
-	 */
-	function add_submenu_scripts() {
-		if ( isset( $_GET['page'] ) && $this->plugin_prefix . 'options' === $_GET['page'] ) {
-			wp_enqueue_script( $this->plugin_prefix . 'dashboard-scripts', plugin_dir_url( __FILE__ ) . 'js/dashboard-scripts.js', array( 'jquery' ), '0.0.1', true );
-			wp_localize_script( $this->plugin_prefix . 'dashboard-scripts', $this->main_prefix, array(
+		if ( is_admin() ) {
+			$settings_args = array(
+				'plugin_id'       => $this->plugin_id,
 				'preview_dir_url' => plugin_dir_url( __FILE__ ) . 'preview/',
-			) );
+				'title'           => __( 'Custom Hamburger Menu' ),
+				'description'     => __( 'Nullam quis risus eget urna mollis ornare vel eu leo.' ),
+				'fields' => array(
+					array(
+						'type'              => 'select',
+						'preview_prefix'    => 'type-',
+						'preview_height'    => 61,
+						'id'                => 'type',
+						'label'             => __( 'Select Type' ),
+						'description'       => __( 'Proper description goes here' ),
+						'options'           => $this->get_types(),
+						'sanitize_callback' => 'sanitize_text_field',
+					),
+					array(
+						'type'              => 'select',
+						'preview_prefix'    => 'style-',
+						'preview_height'    => 61,
+						'id'                => 'style',
+						'label'             => __( 'Select Style' ),
+						'description'       => __( 'Proper description goes here' ),
+						'options'           => $this->get_styles(),
+						'sanitize_callback' => 'sanitize_text_field',
+					),
+				),
+				'button_save_text' => __( 'Save Changes' ),
+			);
+
+			new Divi_100_Settings( $settings_args );
 		}
-	}
-
-	/**
-	 * Render options page
-	 * @return void
-	 */
-	function render_options_page() {
-		$is_option_updated         = false;
-		$is_option_updated_success = false;
-		$is_option_updated_message = '';
-		$hamburger_menu_style      = 'hamburger-menu-style';
-		$hamburger_menu_type       = 'hamburger-menu-type';
-		$nonce_action              = $this->plugin_prefix . 'options';
-		$nonce                     = $this->plugin_prefix . 'options_nonce';
-
-		// Verify whether an update has been occured
-		if ( isset( $_POST[ $hamburger_menu_style ] ) && isset( $_POST[ $hamburger_menu_type ] ) && isset( $_POST[ $nonce ] ) ) {
-			$is_option_updated = true;
-
-			// Verify nonce. Thou shalt use correct nonce
-			if ( wp_verify_nonce( $_POST[ $nonce ], $nonce_action ) ) {
-
-				// Verify input
-				if ( in_array( $_POST[$hamburger_menu_style], array_keys( $this->get_styles() ) ) && in_array( $_POST[$hamburger_menu_type], array_keys( $this->get_types() ) ) ) {
-					// Update option
-					update_option( $this->plugin_prefix . 'styles', sanitize_text_field( $_POST[ $hamburger_menu_style ] ) );
-					update_option( $this->plugin_prefix . 'types', sanitize_text_field( $_POST[ $hamburger_menu_type ] ) );
-
-					// Update submission status & message
-					$is_option_updated_message = __( 'Your setting has been updated.' );
-					$is_option_updated_success = true;
-				} else {
-					$is_option_updated_message = __( 'Invalid submission. Please try again.' );
-				}
-			} else {
-				$is_option_updated_message = __( 'Error authenticating request. Please try again.' );
-			}
-		}
-
-		?>
-		<div class="wrap">
-			<h1><?php _e( 'Custom Hamburger Menu' ); ?></h1>
-
-			<?php if ( $is_option_updated ) { ?>
-				<div id="setting-error-settings_updated" class="updated settings-error notice is-dismissible <?php echo $is_option_updated_success ? '' : 'error' ?>">
-					<p>
-						<strong><?php echo esc_html( $is_option_updated_message ); ?></strong>
-					</p>
-					<button type="button" class="notice-dismiss">
-						<span class="screen-reader-text"><?php _e( 'Dismiss this notice.' ); ?></span>
-					</button>
-				</div>
-			<?php } ?>
-
-			<form action="" method="POST">
-				<p><?php _e( 'Proper description goes here Nullam id dolor id nibh ultricies vehicula ut id elit. Vestibulum id ligula porta felis euismod semper. Nullam id dolor id nibh ultricies vehicula ut id elit. Vestibulum id ligula porta felis euismod semper.' ); ?></p>
-
-				<table class="form-table">
-					<tbody>
-						<tr>
-							<th scope="row">
-								<label for="hamburger-menu-type"><?php _e( 'Select Type' ); ?></label>
-							</th>
-							<td>
-								<select name="hamburger-menu-type" id="hamburger-menu-type">
-									<?php
-									// Get saved type
-									$type = $this->get_selected_type();
-
-									// Render options
-									foreach ( $this->get_types() as $type_id => $type_label ) {
-										printf(
-											'<option value="%1$s" %3$s>%2$s</option>',
-											esc_attr( $type_id ),
-											esc_html( $type_label ),
-											"{$type}" === "{$type_id}" ? 'selected="selected"' : ''
-										);
-									}
-									?>
-								</select>
-								<p class="description"><?php _e( 'Proper description goes here' ); ?></p>
-
-							</td>
-						</tr>
-
-						<tr>
-							<th scope="row">
-								<label for="hamburger-menu-style"><?php _e( 'Select Style' ); ?></label>
-							</th>
-							<td>
-								<select name="hamburger-menu-style" id="hamburger-menu-style">
-									<?php
-									// Get saved style
-									$style = $this->get_selected_style();
-
-									// Render options
-									foreach ( $this->get_styles() as $style_id => $style_label ) {
-										printf(
-											'<option value="%1$s" %3$s>%2$s</option>',
-											esc_attr( $style_id ),
-											esc_html( $style_label ),
-											"{$style}" === "{$style_id}" ? 'selected="selected"' : ''
-										);
-									}
-									?>
-								</select>
-								<p class="description"><?php _e( 'Proper description goes here' ); ?></p>
-								<div class="option-preview" style="margin-top: 20px; <?php echo ( '' !== $style && '' !== $type ) ? 'min-height: 65px; ' : ''; ?>">
-								<?php if ( '' !== $style ) { ?>
-									<img src="<?php echo plugin_dir_url( __FILE__ ) . 'preview/hamburger-' . $type .'-' . $style . '.gif'; ?>">
-								<?php } ?>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<!-- /.form-table -->
-
-				<?php wp_nonce_field( $nonce_action, $nonce ); ?>
-
-				<p class="submit">
-					<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Save Changes' ); ?>">
-				</p>
-				<!-- /.submit -->
-
-			</form>
-		</div>
-		<!-- /.wrap -->
-		<?php
 	}
 
 	/**
@@ -253,41 +134,15 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	}
 
 	/**
-	 * Get selected option
-	 * @return string
-	 */
-	function get_selected_option( $singular, $plural ) {
-		$option = get_option( $this->plugin_prefix . $plural, '' );
-
-		return apply_filters( $this->plugin_prefix . 'get_selected_' . $singular, $option );
-	}
-
-	/**
-	 * Get selected style
-	 * @return string
-	 */
-	function get_selected_style() {
-		return $this->get_selected_option( 'style', 'styles' );
-	}
-
-	/**
-	 * Get selected type
-	 * @return string
-	 */
-	function get_selected_type() {
-		return $this->get_selected_option( 'type', 'types' );
-	}
-
-	/**
 	 * Add specific class to <body>
 	 * @return array
 	 */
 	function body_class( $classes ) {
 		// Get selected style
-		$selected_style = $this->get_selected_style();
+		$selected_style = $this->utils->get_value( 'style' );
 
 		// Get selected type
-		$selected_type = $this->get_selected_type();
+		$selected_type = $this->utils->get_value( 'type' );
 
 		// Assign specific class to <body> if needed
 		if ( '' !== $selected_style ) {
