@@ -82,7 +82,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 					array(
 						'type'              => 'select',
 						'preview_prefix'    => 'type-',
-						'preview_height'    => 61,
+						'has_preview'       => false,
 						'id'                => 'type',
 						'label'             => __( 'Select Type' ),
 						'description'       => __( 'Proper description goes here' ),
@@ -92,7 +92,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 					array(
 						'type'              => 'select',
 						'preview_prefix'    => 'style-',
-						'preview_height'    => 61,
+						'has_preview'       => false,
 						'id'                => 'style',
 						'label'             => __( 'Select Style' ),
 						'description'       => __( 'Proper description goes here' ),
@@ -104,7 +104,26 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 			);
 
 			new Divi_100_Settings( $settings_args );
+
+			// Add specific scripts for hamburger-menu plugin
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		}
+	}
+
+	/**
+	 * Modify dashboard scripts
+	 *
+	 * @return void
+	 */
+	function enqueue_scripts() {
+		// Dequeue default scripts
+		wp_dequeue_script( $this->plugin_id . '-admin_scripts' );
+
+		// Enqueue hamburger menu specific scripts
+		wp_enqueue_script( $this->plugin_id . '-admin_hamburger_menu_scripts', plugin_dir_url( __FILE__ ) . 'js/dashboard-scripts.js', array( 'jquery' ), '0.0.1', true );
+		wp_localize_script( $this->plugin_id . '-admin_hamburger_menu_scripts', 'et_divi_100_js_params', apply_filters( 'et_divi_100_js_params', array(
+			'preview_dir_url' => esc_url( plugin_dir_url( __FILE__ ) . 'preview/' ),
+		) ) );
 	}
 
 	/**

@@ -1,22 +1,30 @@
 jQuery(document).ready(function ($) {
-	// Update preview whenever select is changed
-	$('.form-table select').change( function() {
-		var $preview_wrapper = $('.option-preview'),
-			preview_prefix = 'hamburger-',
-			$type = $('#hamburger-menu-type'),
-			type = $type.find('option:selected').val(),
-			$style = $('#hamburger-menu-style'),
-			style = $style.find('option:selected').val(),
-			preview_file = preview_prefix + type + '-' + style;
+	var $form_table = $('.et-divi-100-form-table'),
+		$menu_type  = $('#et_divi_100_custom_hamburger_menu-type'),
+		$menu_style = $('#et_divi_100_custom_hamburger_menu-style');
 
-		if( type !== '' && style !== '' ) {
-			$preview = $('<img />', {
-				src : et_divi_100_.preview_dir_url + preview_file + '.gif'
-			});
+	// Prepend preview container
+	$form_table.find('tr:last td:last').append( $( '<div />', { id : 'hamburger-menu-preview' }) );
 
-			$preview_wrapper.css({ 'minHeight' : 65 }).html( $preview );
+	// Update preview
+	function update_hamburger_menu_preview() {
+		var $preview = $('#hamburger-menu-preview');
+
+		if ( $menu_type.val() !== '' && $menu_style.val() !== '' ) {
+			$preview.html( $( '<img />', {
+				src : et_divi_100_js_params.preview_dir_url + 'hamburger-' + $menu_type.val()  + '-' + $menu_style.val() + '.gif',
+				style : 'margin-top: 20px;'
+			} ) );
 		} else {
-			$preview_wrapper.css({ 'minHeight' : '' }).empty();
+			$preview.empty();
 		}
+	}
+
+	// Update preview on page load
+	update_hamburger_menu_preview();
+
+	// Live update preview
+	$form_table.on( 'change', 'select', function() {
+		update_hamburger_menu_preview();
 	});
 });
