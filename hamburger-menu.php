@@ -6,7 +6,7 @@
 */
 
 /*
-* Plugin Name: Custom Hamburger Menu
+* Plugin Name: Divi 100 Hamburger Menu
 * Plugin URI: https://elegantthemes.com/
 * Description: This plugin gives you the option to choose between 20 different hamburger menu variations for your header.
 * Author: Elegant Themes
