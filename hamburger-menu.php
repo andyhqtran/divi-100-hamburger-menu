@@ -121,9 +121,9 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 			wp_dequeue_script( $this->plugin_id . '-admin_scripts' );
 
 			// Enqueue hamburger menu specific scripts
-			wp_enqueue_script( $this->plugin_id . '-admin_hamburger_menu_scripts', plugin_dir_url( __FILE__ ) . 'js/admin-scripts.js', array( 'jquery' ), '0.0.1', true );
+			wp_enqueue_script( $this->plugin_id . '-admin_hamburger_menu_scripts', plugin_dir_url( __FILE__ ) . 'assets/js/admin-scripts.js', array( 'jquery' ), '0.0.1', true );
 			wp_localize_script( $this->plugin_id . '-admin_hamburger_menu_scripts', 'et_divi_100_js_params', apply_filters( 'et_divi_100_js_params', array(
-				'preview_dir_url' => esc_url( plugin_dir_url( __FILE__ ) . 'preview/' ),
+				'preview_dir_url' => esc_url( plugin_dir_url( __FILE__ ) . 'assets/preview/' ),
 			) ) );
 		}
 	}
@@ -185,8 +185,8 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	 * @return void
 	 */
 	function enqueue_frontend_scripts() {
-		wp_enqueue_style( 'custom-hamburger-menus', plugin_dir_url( __FILE__ ) . 'css/style.css' );
-		wp_enqueue_script( 'custom-hamburger-menus', plugin_dir_url( __FILE__ ) . 'js/scripts.js', array( 'jquery' ), '0.0.1', true );
+		wp_enqueue_style( 'custom-hamburger-menus', plugin_dir_url( __FILE__ ) . 'assets/css/style.css' );
+		wp_enqueue_script( 'custom-hamburger-menus', plugin_dir_url( __FILE__ ) . 'assets/js/scripts.js', array( 'jquery' ), '0.0.1', true );
 	}
 }
 ET_Divi_100_Custom_Hamburger_Menu::instance();
