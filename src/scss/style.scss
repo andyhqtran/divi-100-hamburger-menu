@@ -22,8 +22,9 @@ $white: #FFF;
 // Divi 100 Settings
 $prefix-plugin: "custom_hamburger_menu";
 $prefix: ".et_divi_100_" + $prefix-plugin;
+$prefix-icon: $prefix + "__icon";
 $prefix-style: $prefix + "--style-";
-$prefix-toggle: $prefix + "--toggled";
+$prefix-toggle: $prefix-icon + "--toggled";
 $prefix-type: $prefix + "--type-";
 
 // Hamburger Settings
@@ -36,7 +37,7 @@ $bar-timing: cubic-bezier(0.28, 0.55, 0.385, 1.65);
 @media only screen and (max-width: 980px) {}
 
 /* Menu */
-#{$prefix} {
+#{$prefix-icon} {
   position: relative;
   display: block;
   width: $hamburger-size;
@@ -66,13 +67,13 @@ $bar-timing: cubic-bezier(0.28, 0.55, 0.385, 1.65);
 }
 
 @mixin type($type) {
-  #{$prefix-type + $type + " " + $prefix} {
+  #{$prefix-type + $type + " " + $prefix-icon} {
     @content;
   }
 }
 
 @mixin style($type, $style) {
-  #{$prefix-type + $type + $prefix-style + $style + " " + $prefix + $prefix-toggle} {
+  #{$prefix-type + $type + $prefix-style + $style + " " + $prefix-icon + $prefix-toggle} {
     @content;
   }
 }
@@ -90,7 +91,7 @@ $bar-timing: cubic-bezier(0.28, 0.55, 0.385, 1.65);
 @import "types/type-4";
 
 /* Toggled */
-#{$prefix + $prefix-toggle} {
+#{$prefix-icon + $prefix-toggle} {
 
   div {
     width: 100%;
@@ -116,16 +117,22 @@ $bar-timing: cubic-bezier(0.28, 0.55, 0.385, 1.65);
   }
 }
 
-.mobile_menu_bar {
-  &:before,
-  &:after {
-    display: none;
+#{$prefix} {
+
+  .mobile_menu_bar {
+    &:before,
+    &:after {
+      display: none;
+    }
   }
 }
 
 @media (max-width: 980px) {
-  .mobile_menu_bar {
-    padding-bottom: 0;
-    margin-bottom: 26px;
+  #{$prefix} {
+
+    .mobile_menu_bar {
+      padding-bottom: 0;
+      margin-bottom: 26px;
+    }
   }
 }
