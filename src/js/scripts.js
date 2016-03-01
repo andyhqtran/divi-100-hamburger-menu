@@ -6,7 +6,7 @@ jQuery(document).ready(function ($) {
   var accentColor = $(".mobile_menu_bar").css("color");
 
   // Checks if body class exists.
-  if (!$bodyClass.length) {
+  if ($bodyClass.length) {
     // Finds .mobile_menu_bar_toggle class
     // Adds .et_divi_100_custom_hamburger_menu__icon class
     // Add 3 divs to html
