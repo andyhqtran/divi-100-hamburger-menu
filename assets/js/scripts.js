@@ -12,11 +12,7 @@ jQuery(document).ready(function ($) {
     var $iconName = 'et_divi_100_custom_hamburger_menu__icon',
       $toggledName = $iconName + '--toggled';
 
-    // Finds .mobile_menu_bar_toggle class
-    // Adds .et_divi_100_custom_hamburger_menu__icon class
-    // Add 3 divs to html
-    // Gets theme colors
-
+    // Appends icon bars
     $(".mobile_menu_bar")
       .addClass($iconName)
       .html('<div></div><div></div><div></div>');
