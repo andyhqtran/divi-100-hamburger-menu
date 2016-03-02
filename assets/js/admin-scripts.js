@@ -1,10 +1,10 @@
 jQuery(document).ready(function ($) {
-	var $form_table = $('.et-divi-100-form-table'),
+	var $form       = $('.et-divi-100-form'),
 		$menu_type  = $('#et_divi_100_custom_hamburger_menu-type'),
 		$menu_style = $('#et_divi_100_custom_hamburger_menu-style');
 
 	// Prepend preview container
-	$form_table.find('tr:last td:last').append( $( '<div />', { id : 'hamburger-menu-preview' }) );
+	$form.find('.epanel-box:last .box-content').append( $( '<div />', { id : 'hamburger-menu-preview' }) );
 
 	// Update preview
 	function update_hamburger_menu_preview() {
@@ -24,7 +24,7 @@ jQuery(document).ready(function ($) {
 	update_hamburger_menu_preview();
 
 	// Live update preview
-	$form_table.on( 'change', 'select', function() {
+	$form.on( 'change', 'select', function() {
 		update_hamburger_menu_preview();
 	});
 });
