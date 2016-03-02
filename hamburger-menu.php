@@ -231,6 +231,10 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 		$selected_type = $this->utils->get_value( 'type' );
 
 		// Assign specific class to <body> if needed
+		if ( '' !== $selected_style && '' !== $selected_type ) {
+			$classes[] = esc_attr(  $this->config['plugin_id'] );
+		}
+
 		if ( '' !== $selected_style ) {
 			$classes[] = esc_attr(  $this->config['plugin_prefix'] . '-style-' . $selected_style );
 		}
