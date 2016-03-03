@@ -1,12 +1,9 @@
 jQuery(document).ready(function ($) {
 
-  // :before isn't apart of the dom, so unable to get the accent color.
-  // var accentColor = $(".mobile_menu_bar:before").css("color");
-
   var $bodyClass = $('.et_divi_100_custom_hamburger_menu'),
-    $accentColor = $(".mobile_menu_bar").css("color"),
+    $accentColor = $(".et_mobile_menu").css("border-color"),
     $bodyColor = $("body").css("color");
-
+  console.log($accentColor);
   // Checks if body class exists
   if ($bodyClass.length) {
     var $iconName = 'et_divi_100_custom_hamburger_menu__icon',
@@ -18,7 +15,7 @@ jQuery(document).ready(function ($) {
       .html('<div></div><div></div><div></div>');
 
     // Append colors style block
-    $('.et_divi_100_custom_hamburger_menu__icon div, span.mobile_menu_bar.et_toggle_fullscreen_menu.et_divi_100_custom_hamburger_menu__icon.et_divi_100_custom_hamburger_menu__icon--toggled div').css('color', $accentColor);
+    $('.et_divi_100_custom_hamburger_menu__icon div, span.mobile_menu_bar.et_toggle_fullscreen_menu.et_divi_100_custom_hamburger_menu__icon.et_divi_100_custom_hamburger_menu__icon--toggled div').css('background', $accentColor);
 
     $('<style> .et_divi_100_custom_hamburger_menu--type-2 .et_divi_100_custom_hamburger_menu__icon div:before, .et_divi_100_custom_hamburger_menu--type-2 .et_divi_100_custom_hamburger_menu__icon div:after, .et_divi_100_custom_hamburger_menu--type-3 .et_divi_100_custom_hamburger_menu__icon div:before, .et_divi_100_custom_hamburger_menu--type-3 .et_divi_100_custom_hamburger_menu__icon div:after {background: ' + $bodyColor + '} </style>').appendTo('body');
 
