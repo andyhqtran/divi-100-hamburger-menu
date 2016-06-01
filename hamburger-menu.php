@@ -185,6 +185,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 			wp_enqueue_script( $this->config['plugin_id'] . '-admin_hamburger_menu_scripts', plugin_dir_url( __FILE__ ) . 'assets/js/admin-scripts.js', array( 'jquery' ), $this->config['plugin_version'], true );
 			wp_localize_script( $this->config['plugin_id'] . '-admin_hamburger_menu_scripts', 'et_divi_100_js_params', apply_filters( 'et_divi_100_js_params', array(
 				'preview_dir_url' => esc_url( plugin_dir_url( __FILE__ ) . 'assets/preview/' ),
+				'help_label'      => esc_html__( 'Help' ),
 			) ) );
 		}
 	}
