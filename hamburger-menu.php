@@ -52,11 +52,10 @@ class ET_Divi_100_Custom_Hamburger_Menu_Config {
 		return array(
 			'main_prefix'        => $main_prefix,
 			'plugin_name'        => __( 'Custom Hamburger Menu' ),
-			'plugin_description' => __( 'Nullam quis risus eget urna mollis ornare vel eu leo.' ),
 			'plugin_slug'        => $plugin_slug,
 			'plugin_id'          => "{$main_prefix}{$plugin_slug}",
 			'plugin_prefix'      => "{$main_prefix}{$plugin_slug}-",
-			'plugin_version'     => 20160526,
+			'plugin_version'     => 20160601,
 			'plugin_dir_path'    => plugin_dir_path( __FILE__ ),
 		);
 	}
@@ -137,9 +136,9 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 		if ( is_admin() ) {
 			$settings_args = array(
 				'plugin_id'       => $this->config['plugin_id'],
+				'plugin_slug'     => $this->config['plugin_slug'],
 				'preview_dir_url' => plugin_dir_url( __FILE__ ) . 'preview/',
 				'title'           => __( 'Custom Hamburger Menu' ),
-				'description'     => __( 'Nullam quis risus eget urna mollis ornare vel eu leo.' ),
 				'fields' => array(
 					array(
 						'type'              => 'select',
@@ -147,7 +146,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 						'has_preview'       => false,
 						'id'                => 'type',
 						'label'             => __( 'Select Type' ),
-						'description'       => __( 'Proper description goes here' ),
+						'description'       => __( 'This type will be used on the hamburger menu' ),
 						'options'           => $this->get_types(),
 						'sanitize_callback' => 'sanitize_text_field',
 					),
@@ -157,7 +156,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 						'has_preview'       => false,
 						'id'                => 'style',
 						'label'             => __( 'Select Style' ),
-						'description'       => __( 'Proper description goes here' ),
+						'description'       => __( 'This style will be used on the hamburger menu' ),
 						'options'           => $this->get_styles(),
 						'sanitize_callback' => 'sanitize_text_field',
 					),
