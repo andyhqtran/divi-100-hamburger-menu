@@ -177,7 +177,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	 * @return void
 	 */
 	function enqueue_scripts() {
-		if ( isset( $_GET['page'] ) && $this->config['plugin_id'] === $_GET['page'] ) {
+		if ( isset( $_GET['page'] ) && ( $this->config['plugin_id'] === $_GET['page'] || ( 'et_divi_100_options' === $_GET['page'] && et_divi_100_get_most_updated_plugin_slug() === $this->config['plugin_slug'] ) ) ) {
 			// Dequeue default scripts
 			wp_dequeue_script( $this->config['plugin_id'] . '-admin_scripts' );
 
