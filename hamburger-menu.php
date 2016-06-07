@@ -139,28 +139,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 				'plugin_slug'     => $this->config['plugin_slug'],
 				'preview_dir_url' => plugin_dir_url( __FILE__ ) . 'preview/',
 				'title'           => __( 'Custom Hamburger Menu' ),
-				'fields' => array(
-					array(
-						'type'              => 'select',
-						'preview_prefix'    => 'type-',
-						'has_preview'       => false,
-						'id'                => 'type',
-						'label'             => __( 'Select Type' ),
-						'description'       => __( 'This type will be used on the hamburger menu' ),
-						'options'           => $this->get_types(),
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-					array(
-						'type'              => 'select',
-						'preview_prefix'    => 'style-',
-						'has_preview'       => false,
-						'id'                => 'style',
-						'label'             => __( 'Select Style' ),
-						'description'       => __( 'This style will be used on the hamburger menu' ),
-						'options'           => $this->get_styles(),
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-				),
+				'fields'          => $this->settings_fields(),
 				'button_save_text' => __( 'Save Changes' ),
 			);
 
@@ -169,6 +148,47 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 			// Add specific scripts for hamburger-menu plugin
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		}
+	}
+
+	private function settings_fields() {
+		return array(
+			'type' => array(
+				'type'              => 'select',
+				'preview_prefix'    => 'type-',
+				'has_preview'       => false,
+				'id'                => 'type',
+				'label'             => __( 'Select Type' ),
+				'description'       => __( 'This type will be used on the hamburger menu' ),
+				'options'           => $this->get_types(),
+				'sanitize_callback' => 'sanitize_text_field',
+			),
+			'style' => array(
+				'type'              => 'select',
+				'preview_prefix'    => 'style-',
+				'has_preview'       => false,
+				'id'                => 'style',
+				'label'             => __( 'Select Style' ),
+				'description'       => __( 'This style will be used on the hamburger menu' ),
+				'options'           => $this->get_styles(),
+				'sanitize_callback' => 'sanitize_text_field',
+			),
+			'default-color' => array(
+				'type'                 => 'color',
+				'id'                   => 'default-color',
+				'label'                => __( 'Select Default Color' ),
+				'description'          => __( 'The color you choose will be used as color on the blocks of hamburger menu' ),
+				'sanitize_callback'    => 'et_divi_100_sanitize_alpha_color',
+				'default'              => '#000000',
+			),
+			'active-color' => array(
+				'type'                 => 'color',
+				'id'                   => 'active-color',
+				'label'                => __( 'Select Active Color' ),
+				'description'          => __( 'The color you choose will be used as color on the blocks of hamburger menu when it is being clicked' ),
+				'sanitize_callback'    => 'et_divi_100_sanitize_alpha_color',
+				'default'              => '#000000',
+			),
+		);
 	}
 
 	/**
@@ -182,7 +202,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 			wp_dequeue_script( $this->config['plugin_id'] . '-admin_scripts' );
 
 			// Enqueue hamburger menu specific scripts
-			wp_enqueue_script( $this->config['plugin_id'] . '-admin_hamburger_menu_scripts', plugin_dir_url( __FILE__ ) . 'assets/js/admin-scripts.js', array( 'jquery' ), $this->config['plugin_version'], true );
+			wp_enqueue_script( $this->config['plugin_id'] . '-admin_hamburger_menu_scripts', plugin_dir_url( __FILE__ ) . 'assets/js/admin-scripts.js', array( 'jquery', 'iris' ), $this->config['plugin_version'], true );
 			wp_localize_script( $this->config['plugin_id'] . '-admin_hamburger_menu_scripts', 'et_divi_100_js_params', apply_filters( 'et_divi_100_js_params', array(
 				'preview_dir_url' => esc_url( plugin_dir_url( __FILE__ ) . 'assets/preview/' ),
 				'help_label'      => esc_html__( 'Help' ),
@@ -253,5 +273,46 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 	function enqueue_frontend_scripts() {
 		wp_enqueue_style( 'custom-hamburger-menus', plugin_dir_url( __FILE__ ) . 'assets/css/style.css', array(), $this->config['plugin_version'] );
 		wp_enqueue_script( 'custom-hamburger-menus', plugin_dir_url( __FILE__ ) . 'assets/js/scripts.js', array( 'jquery' ), $this->config['plugin_version'], true );
+
+		// Get plugin settings
+		$settings             = $this->settings_fields();
+
+		// Add custom default color
+		$default_color_default  = $settings['default-color']['default'];
+		$default_color          = $this->utils->get_value( 'default-color', $default_color_default );
+		$default_color_selector = ( '2' === $this->utils->get_value( 'type', '' ) || '3' === $this->utils->get_value( 'type', '' ) ) ?
+		'body.et_divi_100_custom_hamburger_menu .et_divi_100_custom_hamburger_menu__icon div:before,
+		body.et_divi_100_custom_hamburger_menu .et_divi_100_custom_hamburger_menu__icon div:after' :
+		'body.et_divi_100_custom_hamburger_menu .et_divi_100_custom_hamburger_menu__icon div';
+
+		if ( $default_color && $default_color !== $default_color_default ) {
+			$custom_default_color_css = sprintf(
+				'%1$s {
+					background: %2$s;
+				}',
+				$default_color_selector,
+				et_divi_100_sanitize_alpha_color( $default_color )
+			);
+			wp_add_inline_style( 'custom-hamburger-menus', $custom_default_color_css );
+		}
+
+		// Add custom active color
+		$active_color_active  = $settings['active-color']['default'];
+		$active_color          = $this->utils->get_value( 'active-color', $active_color_active );
+		$active_color_selector = ( '2' === $this->utils->get_value( 'type', '' ) || '3' === $this->utils->get_value( 'type', '' ) ) ?
+		'body.et_divi_100_custom_hamburger_menu .et_divi_100_custom_hamburger_menu__icon.et_divi_100_custom_hamburger_menu__icon--toggled div:before,
+		body.et_divi_100_custom_hamburger_menu .et_divi_100_custom_hamburger_menu__icon.et_divi_100_custom_hamburger_menu__icon--toggled div:after' :
+		'body.et_divi_100_custom_hamburger_menu .et_divi_100_custom_hamburger_menu__icon.et_divi_100_custom_hamburger_menu__icon--toggled div';
+
+		if ( $active_color && $active_color !== $active_color_active ) {
+			$custom_active_color_css = sprintf(
+				'%1$s {
+					background: %2$s;
+				}',
+				$active_color_selector,
+				et_divi_100_sanitize_alpha_color( $active_color )
+			);
+			wp_add_inline_style( 'custom-hamburger-menus', $custom_active_color_css );
+		}
 	}
 }
