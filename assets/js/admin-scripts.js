@@ -1,10 +1,30 @@
 jQuery(document).ready(function ($) {
 	var $form       = $('.et-divi-100-form'),
 		$menu_type  = $('#et_divi_100_custom_hamburger_menu-type'),
-		$menu_style = $('#et_divi_100_custom_hamburger_menu-style');
+		$menu_style = $('#et_divi_100_custom_hamburger_menu-style'),
+		$idTabs     = $('.idTabs'),
+		$tabs_wrap  = $('#wrap-general');
 
 	// Prepend preview container
 	$form.find('.epanel-box[data-type="select"]:last .box-content').append( $( '<div />', { id : 'hamburger-menu-preview' }) );
+
+	// Append Reference Styles
+	$idTabs.append('<li><a href="#styles-reference">Styles Reference</a></li>');
+	$tabs_wrap.append( $( '<div />', { id: 'styles-reference', class: 'tab-content', style: 'display: block; display: none;' } ).html('<p data-height="625" data-theme-id="21742" data-slug-hash="adVxNg" data-default-tab="result" data-user="elegantthemes" data-embed-version="2" class="codepen">See the Pen <a href="http://codepen.io/team/elegantthemes/pen/adVxNg/">Custom Hamburger Menu</a> by Elegant Themes (<a href="http://codepen.io/elegantthemes">@elegantthemes</a>) on <a href="http://codepen.io">CodePen</a>.</p><script async src="//assets.codepen.io/assets/embed/ei.js"></script>') );
+
+	// Add tab switching mechanism
+	$idTabs.on( 'click', 'a', function(e) {
+		e.preventDefault();
+
+		var $clicked_link = $(this),
+			$selected_tab = $( $clicked_link.attr('href') );
+
+		$idTabs.find('li').removeClass('ui-tabs-active');
+		$tabs_wrap.find('.tab-content').hide();
+
+		$clicked_link.closest('li').addClass('ui-tabs-active');
+		$selected_tab.fadeIn();
+	});
 
 	// Update preview
 	function update_hamburger_menu_preview() {
