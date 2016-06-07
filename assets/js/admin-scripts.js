@@ -10,7 +10,7 @@ jQuery(document).ready(function ($) {
 
 	// Append Reference Styles
 	$idTabs.append('<li><a href="#styles-reference">Styles Reference</a></li>');
-	$tabs_wrap.append( $( '<div />', { id: 'styles-reference', class: 'tab-content', style: 'display: block; display: none;' } ).html('<p data-height="625" data-theme-id="21742" data-slug-hash="adVxNg" data-default-tab="result" data-user="elegantthemes" data-embed-version="2" class="codepen">See the Pen <a href="http://codepen.io/team/elegantthemes/pen/adVxNg/">Custom Hamburger Menu</a> by Elegant Themes (<a href="http://codepen.io/elegantthemes">@elegantthemes</a>) on <a href="http://codepen.io">CodePen</a>.</p><script async src="//assets.codepen.io/assets/embed/ei.js"></script>') );
+	$tabs_wrap.append( $( '<div />', { id: 'styles-reference', class: 'tab-content', style: 'display: block; display: none;' } ).html('<p data-height="625" data-theme-id="21742" data-slug-hash="adVxNg" data-default-tab="result" data-user="elegantthemes" data-embed-version="2" class="codepen">See the Pen <a href="http://codepen.io/team/elegantthemes/pen/adVxNg/">Hamburger Menu</a> by Elegant Themes (<a href="http://codepen.io/elegantthemes">@elegantthemes</a>) on <a href="http://codepen.io">CodePen</a>.</p><script async src="//assets.codepen.io/assets/embed/ei.js"></script>') );
 
 	// Add tab switching mechanism
 	$idTabs.on( 'click', 'a', function(e) {

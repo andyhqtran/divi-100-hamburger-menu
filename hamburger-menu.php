@@ -51,7 +51,7 @@ class ET_Divi_100_Custom_Hamburger_Menu_Config {
 
 		return array(
 			'main_prefix'        => $main_prefix,
-			'plugin_name'        => __( 'Custom Hamburger Menu' ),
+			'plugin_name'        => __( 'Hamburger Menu' ),
 			'plugin_slug'        => $plugin_slug,
 			'plugin_id'          => "{$main_prefix}{$plugin_slug}",
 			'plugin_prefix'      => "{$main_prefix}{$plugin_slug}-",
@@ -88,7 +88,7 @@ class ET_Divi_100_Custom_Hamburger_Menu_Config {
 ET_Divi_100_Custom_Hamburger_Menu_Config::instance();
 
 /**
- * Load Custom Hamburger Menu
+ * Load Hamburger Menu
  */
 class ET_Divi_100_Custom_Hamburger_Menu {
 	/**
@@ -138,7 +138,7 @@ class ET_Divi_100_Custom_Hamburger_Menu {
 				'plugin_id'       => $this->config['plugin_id'],
 				'plugin_slug'     => $this->config['plugin_slug'],
 				'preview_dir_url' => plugin_dir_url( __FILE__ ) . 'preview/',
-				'title'           => __( 'Custom Hamburger Menu' ),
+				'title'           => __( 'Hamburger Menu' ),
 				'fields'          => $this->settings_fields(),
 				'button_save_text' => __( 'Save Changes' ),
 			);
